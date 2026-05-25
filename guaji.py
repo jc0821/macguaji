@@ -458,8 +458,11 @@ class IdleMouseBotApp:
 
 
     def load_key_bindings(self):
+        import os
+        # 将配置文件保存在用户的个人目录下，解决 Mac 权限问题
+        config_path = os.path.join(os.path.expanduser("~"), ".guaji_keys.json")
         try:
-            with open("key_bindings.json", "r") as f:
+            with open(config_path, "r") as f:
                 loaded_bindings = json.load(f)
                 
                 for key_type, keys_str_list in loaded_bindings.items():
@@ -476,14 +479,15 @@ class IdleMouseBotApp:
             }
             self.save_key_bindings()
 
-
     def save_key_bindings(self):
+        import os
+        config_path = os.path.join(os.path.expanduser("~"), ".guaji_keys.json")
         try:
             savable_bindings = {}
             for key, value in self.key_bindings.items():
                 savable_bindings[key] = value
             
-            with open("key_bindings.json", "w") as f:
+            with open(config_path, "w") as f:
                 json.dump(savable_bindings, f, indent=4)
         except Exception as e:
             messagebox.showerror("错误", f"保存快捷键设置失败: {e}")
